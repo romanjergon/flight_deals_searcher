@@ -1,5 +1,7 @@
 import requests
 import datetime
+import logging
+
 from flight_data import FlightData
 
 
@@ -29,10 +31,10 @@ class FlightSearch:
     def get_iata_city_code(self, city: str):
         """
         Searches IATA code for given city, note this is city code, not code of any particual airport as there are cities with more then one airports.
-        :param city:
+        :param city: general name of city, e.g. Rome
         :return: IATA code for flight search
         """
-        print(f"searching IATA city code for {city}")
+        logging.info(f"searching IATA city code for {city}")
 
         city_search_params = {"term": city, "location_types": "city"}
         iata_city_code_response = requests.get(
@@ -42,7 +44,7 @@ class FlightSearch:
         )
         iata_city_code_response.raise_for_status()
         iata_city_code = iata_city_code_response.json()["locations"][0]["code"]
-        print(f"Success IATA city code for {city} found {iata_city_code}")
+        logging.info(f"Success IATA city code for {city} found {iata_city_code}")
         return iata_city_code
 
     def search_flights(
@@ -50,15 +52,21 @@ class FlightSearch:
         destination: str,
         price_treshold: int,
         max_stopovers: int,
-    ) -> FlightData:
+        min_nights: int,
+        max_nights: int,
+    ) -> list[FlightData]:
         """
         Searches all flights by given parameters
-        :param destination:
-        :param price_treshold:
+        :param destination: IATA code of destination city/airport
+        :param price_treshold: Maximum price of flight in EUR
         :param max_stopovers:
+        :param min_nights: Minimum number of nights in destination
+        :param max_nights: Max number of nights in destination
         :return: none if no flight was found, list of flight_data if successful. List is ordered by price ascending as provided by Kiwi API
         """
-        print(f"Searching flight to {destination}, for {max_stopovers} max_stopovers")
+        logging.info(
+            f"Searching flight to {destination}, for {max_stopovers} max_stopovers and {min_nights} to {max_nights} nights."
+        )
 
         flight_search_params: dict[str, object] = {
             "fly_from": self.departure_code,
@@ -70,6 +78,10 @@ class FlightSearch:
             "flight_type": "round",
             "max_stopovers": max_stopovers,
             "price_to": price_treshold,
+            "nights_in_dst_from": min_nights,
+            "nights_in_dst_to": max_nights,
+            "curr": "EUR",
+            "one_for_city": 1,
         }
 
         flight_search_response = requests.get(
@@ -80,26 +92,49 @@ class FlightSearch:
 
         flight_search_response.raise_for_status()
 
-        if len(flight_search_response.json()["data"]) > 0:
-            cheapest_flight = flight_search_response.json()["data"][0]
+        flights_data = flight_search_response.json()["data"]
+        logging.info(f"Found {len(flights_data)} flights")
+        logging.debug(flights_data)
+
+        result_flights: list[FlightData] = []
+
+        for flight_source in flights_data:
+            out_date = datetime.datetime.fromtimestamp(
+                flight_source["route"][0]["dTime"]
+            ).isoformat()
+            return_date = ""
+
+            # find first return route flight
+            for route in flight_source["route"]:
+                if route["return"] == 1:
+                    return_date = datetime.datetime.fromtimestamp(
+                        route["dTime"]
+                    ).isoformat()
+                    break
+
             flight = FlightData(
-                price=cheapest_flight["price"],
-                origin_airport=cheapest_flight["flyFrom"],
-                destination_airport=cheapest_flight["flyTo"],
-                out_date=cheapest_flight["dTime"],
-                return_date=cheapest_flight["aTime"],
+                price=flight_source["price"],
+                departure_airport=flight_source["flyFrom"],
+                destination_airport=flight_source["flyTo"],
+                out_date=out_date,
+                return_date=return_date,
+                deep_link=flight_source["deep_link"],
             )
-            return flight
+            result_flights.append(flight)
 
-
-def location_search_test():
-    fs = FlightSearch()
-    print(fs.get_iata_city_code("Rome"))
+        return result_flights
 
 
 def flight_search_test():
-    fs = FlightSearch()
-    print(fs.search_flights("ROM", 3))
+    flight_searcher = FlightSearch(
+        departure_code="PRG",
+        kiwi_api_key="hLmIqksNK1tnHChtmcb0XY-EoNKPCvqC",
+        kiwi_endpoint="http://tequila-api.kiwi.com",
+        search_period_start=1,
+        search_period_end=180,
+    )
+
+    logging.info(flight_searcher.search_flights("ROM", 500, 1, 2, 8))
 
 
 if __name__ == "__main__":

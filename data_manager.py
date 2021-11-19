@@ -1,6 +1,6 @@
 import requests
 from typing import TypedDict
-from pprint import pprint
+import logging
 
 
 class DataManager:
@@ -13,7 +13,10 @@ class DataManager:
         city: str
         iataCode: str
         tresholdPrice: int
+        lowestPriceDetected: int
         maxStopovers: int
+        minNights: int
+        maxNights: int
         id: int
 
     destinations: list[Destination]
@@ -29,17 +32,20 @@ class DataManager:
         city: str
         iataCode: str
         tresholdPrice: int
+        lowestPriceDetected: int
         maxStopovers: int
+        minNights: int
+        maxNights: int
         id: int
         """
-        print("Reading destinations list from Google sheets")
+        logging.info("Reading destinations list from Google sheets")
 
         response = requests.get(self.sheety_endpoint, headers=self.sheety_headers)
         response.raise_for_status()
         self.destinations = response.json()["prices"]
 
-        print("Destinations list read")
-        pprint(self.destinations)
+        logging.info("Destinations list read")
+        logging.info(self.destinations)
         return self.destinations
 
     def update_destination(self, destination_details: Destination):
@@ -48,7 +54,7 @@ class DataManager:
         :param destination_details:
         :return:
         """
-        print(f"updating destination_details with {destination_details}")
+        logging.info(f"updating destination_details with {destination_details}")
 
         row_endpoint = f"{self.sheety_endpoint}/{destination_details['id']}"
         update_params = {
@@ -56,7 +62,10 @@ class DataManager:
                 "city": destination_details["city"],
                 "iataCode": destination_details["iataCode"],
                 "tresholdPrice": destination_details["tresholdPrice"],
+                "lowestPriceDetected": destination_details["lowestPriceDetected"],
                 "maxStopovers": destination_details["maxStopovers"],
+                "minNights": destination_details["minNights"],
+                "maxNights": destination_details["maxNights"],
             }
         }
         response = requests.put(
