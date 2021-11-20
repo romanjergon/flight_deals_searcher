@@ -6,9 +6,6 @@ import logging
 class DataManager:
     """This class is responsible for talking to the Google Sheet via https://sheety.co/ service."""
 
-    sheety_endpoint: str
-    sheety_headers: dict[str, str] = {}
-
     class Destination(TypedDict):
         city: str
         iataCode: str
@@ -19,6 +16,8 @@ class DataManager:
         maxNights: int
         id: int
 
+    sheety_endpoint: str
+    sheety_headers: dict[str, str] = {}
     destinations: list[Destination]
 
     def __init__(self, endpoint: str, token: str):
