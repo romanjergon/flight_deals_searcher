@@ -11,11 +11,11 @@ To create your own sheet copy example from https://docs.google.com/spreadsheets/
 ### Note
 - Searcher updates the Lowest Price Detected column regularly.
 - IATA Code values are optional, searcher updates the value if it is left empty.
-- All other column`s **values are required**.
+- All other column`s **values are required** .
 
 The sheet must be added to your sheety project (At sheety.co choose new project from google sheet).  GET, PUT methods must be enabled.
 
-##Environement variables
+## Environement variables
 Searcher uses .env file which you must create on your own with following content:
 
 ```
