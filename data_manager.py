@@ -1,6 +1,6 @@
-import requests
 from typing import TypedDict
 import logging
+import requests
 
 
 class DataManager:

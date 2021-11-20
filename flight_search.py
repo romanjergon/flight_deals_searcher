@@ -1,6 +1,6 @@
-import requests
 import datetime
 import logging
+import requests
 
 from flight_data import FlightData
 
