@@ -12,7 +12,7 @@ class DataManager:
     class Destination(TypedDict):
         city: str
         iataCode: str
-        tresholdPrice: int
+        thresholdPrice: int
         lowestPriceDetected: int
         maxStopovers: int
         minNights: int
@@ -31,7 +31,7 @@ class DataManager:
         :return: list of destination, each destination is dict:
         city: str
         iataCode: str
-        tresholdPrice: int
+        thresholdPrice: int
         lowestPriceDetected: int
         maxStopovers: int
         minNights: int
@@ -61,7 +61,7 @@ class DataManager:
             "price": {
                 "city": destination_details["city"],
                 "iataCode": destination_details["iataCode"],
-                "tresholdPrice": destination_details["tresholdPrice"],
+                "thresholdPrice": destination_details["thresholdPrice"],
                 "lowestPriceDetected": destination_details["lowestPriceDetected"],
                 "maxStopovers": destination_details["maxStopovers"],
                 "minNights": destination_details["minNights"],

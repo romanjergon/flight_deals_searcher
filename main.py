@@ -4,17 +4,34 @@ import logging
 import data_manager
 import flight_search
 import mail_notifier
+from flight_data import FlightData
 
 from dotenv import load_dotenv
 
 load_dotenv()
 
 
+def update_lowest_price(
+    dest: data_manager.DataManager.Destination, flights: list[FlightData], data_man: data_manager.DataManager
+) -> None:
+    changed_price = False
+    for flight in flights:
+        if dest["lowestPriceDetected"] == "":
+            dest["lowestPriceDetected"] = flight.price
+            changed_price = True
+        elif dest["lowestPriceDetected"] > flight.price:
+            dest["lowestPriceDetected"] = flight.price
+            changed_price = True
+    # update data in google sheet
+    if changed_price:
+        data_man.update_destination(dest)
+
+
 def main():
     logging.basicConfig(
         level=logging.INFO, format="%(asctime)s %(levelname)s:%(message)s"
     )
-
+    # region constants
     DEPARTURE_CODE = "PRG"
     SEARCH_PERIOD_START = 1
     SEARCH_PERIOD_END = 180
@@ -24,13 +41,15 @@ def main():
     KIWI_ENDPOINT = "http://tequila-api.kiwi.com"
     SMTP_HOST = "smtp.gmail.com"
     SMTP_PORT = 587
+    # endregion
 
-    # load env vars
+    # region load env vars
     sheety_token = os.environ["SHEETY_TOKEN"]
     kiwi_apiKey = os.environ["KIWI_API_KEY"]
     notification_mailbox = os.environ["NOTIFICATION_MAILBOX"]
     mail_password = os.environ["MAIL_PASSWORD"]
     personal_mailbox = os.environ["PERSONAL_MAILBOX"]
+    # endregion
 
     # get destinations from sheety
     dm = data_manager.DataManager(SHEETY_ENDPOINT, sheety_token)
@@ -64,7 +83,7 @@ def main():
     for destination in dm.destinations:
         flights = flight_searcher.search_flights(
             destination["iataCode"],
-            destination["tresholdPrice"],
+            destination["thresholdPrice"],
             destination["maxStopovers"],
             destination["minNights"],
             destination["maxNights"],
@@ -80,17 +99,7 @@ def main():
             mailer_notifier.send_notif_mail(mail_subject, mail_body)
 
             # update detected lowest price
-            changed_price = False
-            for flight in flights:
-                if destination["lowestPriceDetected"] == "":
-                    destination["lowestPriceDetected"] = flight.price
-                    changed_price = True
-                elif destination["lowestPriceDetected"] > flight.price:
-                    destination["lowestPriceDetected"] = flight.price
-                    changed_price = True
-            # update data in google sheet
-            if changed_price:
-                dm.update_destination(destination)
+            update_lowest_price(destination, flights, dm)
 
 
 if __name__ == "__main__":

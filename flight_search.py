@@ -50,7 +50,7 @@ class FlightSearch:
     def search_flights(
         self,
         destination: str,
-        price_treshold: int,
+        price_threshold: int,
         max_stopovers: int,
         min_nights: int,
         max_nights: int,
@@ -58,7 +58,7 @@ class FlightSearch:
         """
         Searches all flights by given parameters
         :param destination: IATA code of destination city/airport
-        :param price_treshold: Maximum price of flight in EUR
+        :param price_threshold: Maximum price of flight in EUR
         :param max_stopovers:
         :param min_nights: Minimum number of nights in destination
         :param max_nights: Max number of nights in destination
@@ -77,7 +77,7 @@ class FlightSearch:
             + datetime.timedelta(days=self.date_to_period),
             "flight_type": "round",
             "max_stopovers": max_stopovers,
-            "price_to": price_treshold,
+            "price_to": price_threshold,
             "nights_in_dst_from": min_nights,
             "nights_in_dst_to": max_nights,
             "curr": "EUR",
@@ -123,19 +123,3 @@ class FlightSearch:
             result_flights.append(flight)
 
         return result_flights
-
-
-def flight_search_test():
-    flight_searcher = FlightSearch(
-        departure_code="PRG",
-        kiwi_api_key="hLmIqksNK1tnHChtmcb0XY-EoNKPCvqC",
-        kiwi_endpoint="http://tequila-api.kiwi.com",
-        search_period_start=1,
-        search_period_end=180,
-    )
-
-    logging.info(flight_searcher.search_flights("ROM", 500, 1, 2, 8))
-
-
-if __name__ == "__main__":
-    flight_search_test()
