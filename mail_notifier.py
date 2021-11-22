@@ -31,5 +31,5 @@ class MailNotifier:
             return connection.sendmail(
                 self.notification_mailbox,
                 self.personal_mailbox,
-                msg=f"Subject:{subject}\n\n{body}",
+                msg=f"Subject:{subject}\n\n{body}".encode("utf-8"),
             )

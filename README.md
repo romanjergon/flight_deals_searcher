@@ -15,7 +15,7 @@ To create your own sheet copy example from https://docs.google.com/spreadsheets/
 
 The sheet must be added to your sheety project (At sheety.co choose new project from google sheet).  GET, PUT methods must be enabled.
 
-## Environement variables
+## Environment variables
 Searcher uses .env file which you must create on your own with following content:
 
 ```
@@ -25,3 +25,7 @@ NOTIFICATION_MAILBOX=[YOUR VALUE]
 MAIL_PASSWORD=[YOUR VALUE]
 PERSONAL_MAILBOX=[YOUR VALUE]
 ```
+
+## Tests
+This is my first attempt at writing unit tests in Python, so do not take the tests seriously.
+Run pytest to execute tests. 
