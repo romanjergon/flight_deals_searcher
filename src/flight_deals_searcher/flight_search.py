@@ -3,7 +3,7 @@ import logging
 from typing import Any
 import requests
 
-from flight_data import FlightData
+from flight_deals_searcher.flight_data import FlightData
 
 
 class FlightSearch:

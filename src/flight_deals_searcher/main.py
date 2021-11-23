@@ -12,7 +12,9 @@ load_dotenv()
 
 
 def update_lowest_price(
-    dest: data_manager.DataManager.Destination, flights: list[FlightData], data_man: data_manager.DataManager
+    dest: data_manager.DataManager.Destination,
+    flights: list[FlightData],
+    data_man: data_manager.DataManager,
 ) -> None:
     changed_price = False
     for flight in flights:

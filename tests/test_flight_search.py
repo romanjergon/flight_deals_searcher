@@ -1,6 +1,7 @@
 import os
-from flight_search import FlightSearch
+from flight_deals_searcher.flight_search import FlightSearch
 from dotenv import load_dotenv
+
 
 load_dotenv()
 

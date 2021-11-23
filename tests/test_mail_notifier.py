@@ -1,6 +1,6 @@
 import os
 from dotenv import load_dotenv
-from mail_notifier import MailNotifier
+from flight_deals_searcher.mail_notifier import MailNotifier
 
 load_dotenv()
 
