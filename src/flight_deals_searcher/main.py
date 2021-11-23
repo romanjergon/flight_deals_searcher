@@ -29,7 +29,7 @@ def update_lowest_price(
         data_man.update_destination(dest)
 
 
-def main():
+def main() -> None:
     logging.basicConfig(
         level=logging.INFO, format="%(asctime)s %(levelname)s:%(message)s"
     )

@@ -47,7 +47,7 @@ class DataManager:
         logging.info(self.destinations)
         return self.destinations
 
-    def update_destination(self, destination_details: Destination):
+    def update_destination(self, destination_details: Destination) -> None:
         """
         Updates destination sheet in google sheet. Updates every column for given record identified by 'id'
         :param destination_details:

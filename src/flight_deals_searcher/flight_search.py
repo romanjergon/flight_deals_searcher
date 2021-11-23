@@ -29,7 +29,7 @@ class FlightSearch:
         self.kiwi_endpoint = kiwi_endpoint
         self.kiwi_headers = {"apikey": kiwi_api_key}
 
-    def get_iata_city_code(self, city: str):
+    def get_iata_city_code(self, city: str) -> str:
         """
         Searches IATA code for given city, note this is city code, not code of any particual airport as there are cities with more then one airports.
         :param city: general name of city, e.g. Rome
@@ -44,7 +44,7 @@ class FlightSearch:
             headers=self.kiwi_headers,
         )
         iata_city_code_response.raise_for_status()
-        iata_city_code = iata_city_code_response.json()["locations"][0]["code"]
+        iata_city_code: str = iata_city_code_response.json()["locations"][0]["code"]
         logging.info(f"Success IATA city code for {city} found {iata_city_code}")
         return iata_city_code
 

@@ -22,7 +22,7 @@ class MailNotifier:
         self,
         subject: str,
         body: str,
-    ):
+    ) -> dict[str, tuple[int, bytes]] :
         """Send notification mail from my notification mailbox to my personal mailbox"""
 
         with smtplib.SMTP(host="smtp.gmail.com", port=587) as connection:
