@@ -1,10 +1,10 @@
 import os
 import logging
 
-import data_manager
-import flight_search
-import mail_notifier
-from flight_data import FlightData
+import flight_deals_searcher.data_manager
+import flight_deals_searcher.flight_search
+import flight_deals_searcher.mail_notifier
+from flight_deals_searcher.flight_data import FlightData
 
 from dotenv import load_dotenv
 
@@ -12,13 +12,14 @@ load_dotenv()
 
 
 def update_lowest_price(
-    dest: data_manager.DataManager.Destination,
+    dest: flight_deals_searcher.data_manager.DataManager.Destination,
     flights: list[FlightData],
-    data_man: data_manager.DataManager,
+    data_man: flight_deals_searcher.data_manager.DataManager,
 ) -> None:
     changed_price = False
     for flight in flights:
-        if dest["lowestPriceDetected"] == "":
+        # Type dirty hack but this is what we get from sheety
+        if dest["lowestPriceDetected"] == "":  # type: ignore[comparison-overlap]
             dest["lowestPriceDetected"] = flight.price
             changed_price = True
         elif dest["lowestPriceDetected"] > flight.price:
@@ -54,17 +55,17 @@ def main() -> None:
     # endregion
 
     # get destinations from sheety
-    dm = data_manager.DataManager(SHEETY_ENDPOINT, sheety_token)
+    dm = flight_deals_searcher.data_manager.DataManager(SHEETY_ENDPOINT, sheety_token)
     dm.read_destinations()
 
-    flight_searcher = flight_search.FlightSearch(
+    flight_searcher = flight_deals_searcher.flight_search.FlightSearch(
         departure_code=DEPARTURE_CODE,
         kiwi_api_key=kiwi_apiKey,
         kiwi_endpoint=KIWI_ENDPOINT,
         search_period_start=SEARCH_PERIOD_START,
         search_period_end=SEARCH_PERIOD_END,
     )
-    mailer_notifier = mail_notifier.MailNotifier(
+    mailer_notifier = flight_deals_searcher.mail_notifier.MailNotifier(
         smtp_host=SMTP_HOST,
         smtp_port=SMTP_PORT,
         notification_mailbox=notification_mailbox,

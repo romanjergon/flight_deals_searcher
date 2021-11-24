@@ -1,3 +1,4 @@
+import pytest
 import os
 from dotenv import load_dotenv
 from flight_deals_searcher.mail_notifier import MailNotifier
@@ -5,6 +6,7 @@ from flight_deals_searcher.mail_notifier import MailNotifier
 load_dotenv()
 
 
+@pytest.mark.skip(reason="no way of currently testing this without .env file")
 def test_send_notif_mail():
     notifier = MailNotifier(
         smtp_host="smtp.gmail.com",
