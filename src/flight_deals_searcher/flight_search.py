@@ -66,7 +66,8 @@ class FlightSearch:
         :return: none if no flight was found, list of flight_data if successful. List is ordered by price ascending as provided by Kiwi API
         """
         logging.info(
-            f"Searching flight to {destination}, for {max_stopovers} max_stopovers and {min_nights} to {max_nights} nights."
+            f"Searching flight to {destination}, for {max_stopovers} \
+            max_stopovers and {min_nights} to {max_nights} nights."
         )
 
         flight_search_params: dict[str, Any] = {

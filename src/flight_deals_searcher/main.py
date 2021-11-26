@@ -98,7 +98,9 @@ def main() -> None:
                 f"Cheap tickets from {DEPARTURE_CODE} to {destination['city']}\n "
             )
             for flight in flights:
-                mail_body += f"Flight from {flight.departure_airport} to {flight.destination_airport} just for {flight.price} Euro, departure on {flight.out_date}, return on {flight.return_date}, book at {flight.deep_link}\n"
+                mail_body += f"Flight from {flight.departure_airport} to {flight.destination_airport} \
+                just for {flight.price} Euro, departure on {flight.out_date}, \
+                return on {flight.return_date}, book at {flight.deep_link}\n "
             mailer_notifier.send_notif_mail(mail_subject, mail_body)
 
             # update detected lowest price

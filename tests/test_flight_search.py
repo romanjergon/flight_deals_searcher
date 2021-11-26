@@ -1,4 +1,3 @@
-import pytest
 import os
 from flight_deals_searcher.flight_search import FlightSearch
 from dotenv import load_dotenv
