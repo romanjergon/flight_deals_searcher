@@ -7,7 +7,6 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-#@pytest.mark.skip(reason="no way of currently testing this without .env file")
 def test_flight_search():
     flight_searcher = FlightSearch(
         departure_code="PRG",
