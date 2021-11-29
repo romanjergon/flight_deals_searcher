@@ -7,6 +7,7 @@ addopts = "--cov=flight_deals_searcher"
 testpaths = [
     "tests",
 ]
+mock_use_standalone_module = true
 
 [tool.mypy]
 mypy_path = "src"
