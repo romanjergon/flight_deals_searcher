@@ -1,5 +1,6 @@
-from typing import TypedDict
 import logging
+from typing import TypedDict
+
 import requests
 
 

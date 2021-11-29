@@ -1,8 +1,9 @@
 import os
-from dotenv import load_dotenv
-import mock
-from flight_deals_searcher.mail_notifier import MailNotifier
 
+import mock
+from dotenv import load_dotenv
+
+from flight_deals_searcher.mail_notifier import MailNotifier
 
 load_dotenv()
 

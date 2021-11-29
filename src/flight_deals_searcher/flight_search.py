@@ -1,6 +1,7 @@
 import datetime
 import logging
 from typing import Any
+
 import requests
 
 from flight_deals_searcher.flight_data import FlightData

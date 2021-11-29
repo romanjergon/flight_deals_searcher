@@ -1,12 +1,12 @@
-import os
 import logging
+import os
+
+from dotenv import load_dotenv
 
 import flight_deals_searcher.data_manager
 import flight_deals_searcher.flight_search
 import flight_deals_searcher.mail_notifier
 from flight_deals_searcher.flight_data import FlightData
-
-from dotenv import load_dotenv
 
 load_dotenv()
 
