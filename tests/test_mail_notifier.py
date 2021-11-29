@@ -20,6 +20,7 @@ def test_send_notif_mail(mocker):
         )
 
         result = notifier.send_notif_mail(
+
             "This is testing mail for mail notifier class", "Lorem Ipsum"
         )
         assert (
