@@ -8,4 +8,4 @@ setuptools~=49.2.1
 mock~=4.0.3
 isort~=5.10.1
 bandit~=1.7.1
-safety~=safety~=
+safety~=1.10.3
